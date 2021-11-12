@@ -1,6 +1,6 @@
-모임 전에 정리해놓은 글입니다. 결정된 사항이 아닌 혼자 생각해본 내용들입니다. 
+스터디 전에 정리해놓은 글입니다. 결정된 사항이 아닌 혼자 생각해본 내용들이니 가볍게 봐주세요! 
 
-#### 
+
 
 ## 기능
 
@@ -61,7 +61,7 @@
 
 - 네이버 블로그는 크롤링이 아예 되질 않는다.
 
-  -> 'iframe'태그 안에 있는 src 앞부분에 "https://blog.naver.com/"를 추가하여 링크를 만져야 한다.
+  -> 'iframe'태그 안의 src 앞부분에 "https://blog.naver.com/"를 추가한 링크에 접속해 크롤링 해야한다.
 
 
 
@@ -71,13 +71,13 @@
 
 - [Chrome Extensions API reference](https://developer.chrome.com/docs/extensions/reference/)
 
-- [ZUM-Chrome-Extension](https://zuminternet.github.io/Zum-Chrome-Extension/)(배포 과정 참고)
+- [ZUM-Chrome-Extension](https://zuminternet.github.io/Zum-Chrome-Extension/) (배포 과정에 참고하면 좋을 것 같아서 가져왔어요)
 
-- 그 외 각 API별로 링크 게시함 
+- 그 외 각 API별로 링크 게시함
 
 
 
-크롤링 해봤던 것
+크롤링 해봤던 것 (옛날에)
 
 - [Python Beautiful Soup 이용한 일자리 자료 얻기 (Nomad Coder)](https://github.com/kanghyun98/python-study/tree/master/Web_Scrapper)
 - [R을 이용한 세월호 뉴스 비교 분석 프로젝트](https://github.com/kanghyun98/news-comparison)
@@ -86,5 +86,5 @@
 
 익스텐션 연습
 
-- [getStarted](https://developer.chrome.com/docs/extensions/mv3/getstarted/)
+- [공식 사이트에서 제공하는 연습 내용](https://developer.chrome.com/docs/extensions/mv3/getstarted/)
 - [연습 결과](https://github.com/kanghyun98/Toy-Projects/tree/main/chrome-extension_test) 
