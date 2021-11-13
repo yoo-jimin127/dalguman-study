@@ -1,0 +1,11 @@
+{
+    "name" : "검색어 키워드 띄워 주는 프로그램",
+    "description" : "버튼 클릭->검색어 띄워줌",
+    "version" : "0.1",
+    "permissions" : ["activeTab"],
+    "manifest_version" : 2,
+    "browser_action" : {
+        "default_title" : "test",
+        "default_popup" : "popup.html"
+    }
+}
