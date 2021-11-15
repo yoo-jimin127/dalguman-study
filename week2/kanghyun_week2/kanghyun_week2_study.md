@@ -106,13 +106,12 @@ getCountWords = () => {	// 콜백 함수
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
       function: getCountWords, // 콜백 함수 getCountWords
-    },
-    );
+    });
   
     // 결과 보여주기
     chrome.storage.sync.get('wordCounts', ({ wordCounts }) => {
       resultBox.innerText = `counts: ${wordCounts}`;
-    },
+    });
   });
   
   getCountWords = () => {
@@ -120,10 +119,10 @@ getCountWords = () => {	// 콜백 함수
     chrome.storage.sync.get('userWords', ({ userWords }) => {
       // storage에서 불러오기
       let bodyText = document.body.innerText;
-      let wordCounts = bodyText.match(
-        new RegExp(`\\b${userWords}\\b`, 'gi') // 전처리
-      ).length;
-      console.log(bodyText);
+      let wordCounts =
+        bodyText.match(
+          new RegExp(`\\b${userWords}\\b`, 'gi') // 전처리
+        )?.length ?? 0;
   
       chrome.storage.sync.set({
         wordCounts,
@@ -132,7 +131,7 @@ getCountWords = () => {	// 콜백 함수
   };
   ```
 
-  
+  간단한 기능에 생각보다 많은 시간이 들어가 답답해 잔머리를 굴리다가 나온 생각으로, 
 
 
 
