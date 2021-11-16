@@ -86,7 +86,7 @@ getCountWords = () => {	// 콜백 함수
 
 - 생각해봤던 해결책
 
-  storage로 값을 넘겨줘서 콜백함수 외부에서 결과 태그에 값을 넣어주는 로직을 구현 (올바르게 실행되지 않습니다! 이 부분은 넘어가도 괜찮습니다)
+  storage로 값을 넘겨줘서 콜백함수 외부에서 결과 태그에 값을 넣어주는 로직을 구현 (작동은 되지만, 근본적인 해결방법이 아닙니다.(stroage 사용한 방법))
 
   ```js
   const inputBox = document.getElementById('user'); // 입력 태그
@@ -189,4 +189,25 @@ getCountWords = () => {	// 콜백 함수
 
 - [chrome.runtime.getURL 예시](https://github.com/GoogleChrome/chrome-extensions-samples/blob/main/api/web-accessible-resources/content-script.js)
 - [chrome.storage 공식문서](https://developer.chrome.com/docs/extensions/reference/storage/#synchronous-response-to-storage-updates)
+
+
+
+### 끄적거린것들
+
+웹페이지 화면에 무언가 변화를 줄건가? (필터링한 단어 존재할 시, 알림?)
+-> background.js에서 만들어서 진행하면 알기 쉬울듯
+
+
+
+링크별로 다른 방식 필요함 (ex.네이버 블로그)
+=> 이전에는 웹페이지에서 바로 가져오는 방식 사용했는데, 링크를 인식해서 다르게 적용시킬 수 있는 방법 필요
+-> [chrome.runtime](https://developer.chrome.com/docs/extensions/reference/runtime/)에서 뭔가 가능한가?
+
+
+
+host_permissions이란게 있네 뭔지 알아보자 (혹시 카페같이 회원가입 필요한 곳에서 가능?)
+
+
+
+테스트할때 편하게 할 수 없을까? 매번 업데이트하고 하나씩 눌러보니깐 빡취넹..
 
