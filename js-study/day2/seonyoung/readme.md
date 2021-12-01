@@ -19,5 +19,5 @@
 >  - rotate(${h_grapics}deg
 >    h_grapics 라디안만큼 회전하게만들기
 > 2) 중간에 어이없게 시간 잡아 머근 거
->  - const now = new Date();
+>  - const now = new Date(); 
 >   첨에 입력할 때 Data가 변수로 잡혀서 참조되지않은변수 어쩌구 떠서 시간이 좀 걸렸다,, 힝 그래도 찾아서 행복해   
