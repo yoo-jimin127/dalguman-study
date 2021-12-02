@@ -1,0 +1,36 @@
+ <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="#" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+        window.addEventListener('keydown', );
+        //key -> playSound
+        function playSound() {
+          const audio = documet.querySelector('audio[data-key="${e.keyCode}"]');
+          const key = documet.querySelector('audio[data-key="${e.keyCode}"]');
+          if(!audio) return; //audio, key NULL
+          
+          audio.currentTime = 0;
+          audio.play();
+          key.classlist.add('playing');
+        };  
+        //CSS key-> 효과
+        function removeTransition(e){
+          if (e.propertyName !== 'transform') return;
+          this.classlist.remove('playing');
+        }
+        
+        const keys = document.querySelectorAll('.key');
+        keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+        window.addEventListener("keydown", playSound);
+        //
+    </script>
+  </body>
+</html>
