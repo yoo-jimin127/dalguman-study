@@ -4,6 +4,8 @@
 
 body {
   margin: 0;
+  background-image: url('http://www.cscamera.co.kr/shopimages/cslight/0200010000052.jpg?1578021305');
+  background-size: 100% 100%;
 }
 
 .main {
