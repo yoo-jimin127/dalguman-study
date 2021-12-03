@@ -4,6 +4,8 @@
 
 body {
   margin: 0;
+  background-image: url('https://miricanvas.zendesk.com/hc/article_attachments/900002143643/___________________5_.png');
+  background-size: 100% 100%;
 }
 
 #main {
@@ -17,6 +19,10 @@ body {
 }
 
 .drum-box {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 10%;
   height: 10%;
   border: 1px solid black;
@@ -31,7 +37,7 @@ body {
 
 .drum-type {
   font-size: 0.75rem;
-  color: yellowgreen;
+  color: teal;
 }
 
 .playing {

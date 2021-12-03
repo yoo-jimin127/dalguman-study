@@ -1,4 +1,4 @@
-HTML
+### HTML
 
 1. `audio` 태그를 처음 사용해봤다. (http://tcpschool.com/html-tags/audio)
 
@@ -22,7 +22,7 @@ HTML
 
 
 
-CSS
+### CSS
 
 1. flexbox에 대해 조금 더 공부해봐야할듯, 초반에 거기서 너무 막혔다.
 
@@ -70,7 +70,7 @@ CSS
 
    
 
-JavaScript
+### JavaScript
 
 - `audio` 요소를 불러와 `play()` 메소드로 재생 가능
 - audio요소의 `currentTime` 프로퍼티 값을 이용해 audio play가 종료되기 전에 다시 처음부터 시작할 수 있다.
@@ -126,3 +126,6 @@ JavaScript
 
   
 
+#### 구현 화면
+
+![image](https://user-images.githubusercontent.com/70627979/143888723-e089c498-5637-4a82-8cfb-4097d0378434.png)
