@@ -1,0 +1,31 @@
+{
+    "name": "Getting Started Example",
+    "version": "1.0",
+    "description": "Build an Extension!",
+
+    "page_action": {
+        "default_icon": "icons/32.png",
+        "default_title": "Extension",
+        "default_popup": "popup.html"
+    },
+
+    "background": {
+        "scripts": ["background.js"],
+        "persistent": false
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["http://*.nytimes.com/*"],
+            "css": ["myStyles.css"],
+            "js": ["contentScript.js"]
+        }
+    ],
+
+    "manifest_version": 2,
+
+    "permissions": [
+        "tabs",
+        "declarativeContent"
+    ]
+}
