@@ -1,4 +1,3 @@
-
 const proxy = 'https://kh-proxy.herokuapp.com/'; // 왼쪽은 개인 배포, open proxy server: https://cors-anywhere.herokuapp.com/
 
 // 예제 url (뿌링클 후기)
@@ -9,7 +8,7 @@ const url4 = 'https://m.blog.naver.com/PostView.naver?blogId=ejinna&logNo=222596
 const url5 = 'https://m.blog.naver.com/PostView.naver?blogId=lasohyoung&logNo=222218173843';
 const url6 = 'https://www.smlounge.co.kr/woman/article/43331';
 
-const proxyUrl = proxy + url2; // proxy server에 요청보내기
+const proxyUrl = proxy + url5; // proxy server에 요청보내기
 const getHtml = async (url) => {
   try {
     const response = await fetch(url, {
