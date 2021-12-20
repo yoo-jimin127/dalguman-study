@@ -24,9 +24,9 @@ let innerSelector = {
 
 // 현재 링크 파악 함수
 let separateSite = (url) => {
-  if (url.includes('https://www.google.co.kr/search')) {
+  if (url.includes('google')) {
     return 'google';
-  } else if (url.includes('https://search.naver.com/search.naver')) {
+  } else if (url.includes('naver')) {
     return 'naver';
   } else {
     return null;
@@ -119,17 +119,17 @@ let getHtml = async (url) => {
 
 // 하이라이트 해주는 함수
 let addHighlight = ($target) => {
-  console.log($target);
   $target.style.backgroundColor = HIGHLIGHT_COLOR;
 };
 
 // url 리스트(배열)를 받아   동작시키기
 let list = makeSearchList();
+console.log(list);
 
 let test = (arr) => {
   arr.forEach(async (obj) => {
     const result = await getHtml(obj.link);
-    console.log(result, result.keyExist);
+    console.log(obj.link, obj.target, result);
 
     if (result.keyExist) {
       addHighlight(obj.target);
