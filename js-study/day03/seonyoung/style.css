@@ -1,0 +1,35 @@
+*{
+  box-sizing: border-box;
+}
+
+:root{
+  --base: #ffc600; /* 색상 */
+  --spacing: 3px; /* 기본여백 */
+  --blur: 2px; /* 블러 */     
+}
+
+img{
+  padding: var(--spacing);
+  background: var(--base);
+  filter: blur(var(--blur));
+}
+
+.h1{
+  color: var(--base);
+}
+body {
+text-align: center;
+background: #193549;
+color: white;
+font-family: 'helvetica neue', sans-serif;
+font-weight: 100;
+font-size: 50px;
+}
+
+.controls {
+margin-bottom: 50px;
+}
+
+input {
+width: 100px;
+}
