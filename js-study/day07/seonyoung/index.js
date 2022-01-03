@@ -18,7 +18,7 @@
       // Some and Every Checks
       // Array.prototype.some() // is at least one person 19 or older?
       // some() : 배열 안 요소들이 주어진 함수를 통과하는지 테스트함
-      var thisYear = new Date();
+      let thisYear = new Date();
       const a1 = people.some(person =>{
         return thisYear.getFullYear() - person.year >= 19;
       });
