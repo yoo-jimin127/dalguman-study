@@ -1,7 +1,7 @@
    
     
 ```js
-      var thisYear = new Date();
+      let thisYear = new Date();
 ```
 
 이전에도 이런 기초적인 실수를 한 것 같은데 날짜 함수를 사용할 때    
