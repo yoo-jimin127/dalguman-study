@@ -4,3 +4,4 @@ javascript30에 있던 기능들을 이해하는 데에 도움이 됐다.
 
 결과물 : https://github.com/seonyoungan/Study/tree/main/paintJS   
 학습영상 : https://nomadcoders.co/
+ 
