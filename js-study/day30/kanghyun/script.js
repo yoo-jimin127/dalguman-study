@@ -50,28 +50,30 @@ const handleMoles = () => {
 let lastTime = 15;
 const handleTimer = () => {
   lastTime -= 1;
+  console.log(lastTime);
   $lastTimer.textContent = lastTime;
 };
 
 // 게임 시작
 let isPlaying = false;
-let timer;
+let timer, lastTimer;
 
 const startGame = () => {
   // 초기화
   clearInterval(timer);
+  clearInterval(lastTimer);
   score = 0;
   lastTime = 15;
-
-  $score.textContent = score;
   $startBtn.textContent = 'RESTART';
+  $lastTimer.textContent = lastTime;
+  $score.textContent = score;
 
   timer = setInterval(() => {
     handleTimer();
     handleMoles();
   }, 1000);
 
-  setTimeout(() => {
+  lastTimer = setTimeout(() => {
     clearInterval(timer);
   }, 15000);
 };
