@@ -1,16 +1,26 @@
-// 1. Google
-let searchSelector = '#search .g .yuRUbf > a';
-let targetSelector = 'h3.LC20lb';
+const selectors = {
+  google: {
+    searchSelector: '#search .g .yuRUbf > a',
+    targetSelector: 'h3.LC20lb',
+  },
+  naver: {
+    searchSelector: '.sp_nreview panel-list > ._panel div.total_area > a',
+    targetSelector: '',
+  },
+};
 
-// 2. Naver (view만)
-let searchSelector = '.sp_nreview panel-list > ._panel div.total_area > a';
-let targetSelector = '';
+// 현재 링크 파악 함수
+const separateSite = (url) => {
+  if (url.includes('https://www.google.co.kr/search')) {
+    return 'google';
+  } else if (url.includes('https://search.naver.com/search.naver')) {
+    return 'naver';
+  } else {
+    return null;
+  }
+};
 
-// 3. Daum (블로그, 카페, 웹문서, 브런치)
-let searchSelector = '';
-let targetSelector = '';
-
-// function
+// 링크, 타겟을 포함한 객체 반환 함수
 const makeList = (searchSelector, targetSelector) => {
   const searchList = document.querySelectorAll(searchSelector);
   const uniqList = new Set([...searchList]);
@@ -18,15 +28,21 @@ const makeList = (searchSelector, targetSelector) => {
   const result = [...uniqList].map((item) => {
     return {
       link: item.href, // 분석할 링크
-      target: targetSelector ? item : item.querySelector(targetSelector), // 하이라이트 할 요소
+      target: targetSelector ? item.querySelector(targetSelector) : item, // 하이라이트 할 요소
     };
   });
 
-  console.log(result);
   return result;
 };
 
-// test
-document.querySelectorAll(
-  '#blogCoil > .coll_cont > ul.(list_info mg_cont clear) > li > div.wrap_cont > .cont_inner > .(wrap_tit mg_tit) > a'
-);
+// 종합
+const makeSearchList = (url) => {
+  const site = separateSite(url);
+  const res = makeList(
+    selectors[site].searchSelector,
+    selectors[site].targetSelector
+  );
+  return res;
+};
+
+// 현재 url: window.location.href
