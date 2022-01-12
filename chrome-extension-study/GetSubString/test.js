@@ -16,7 +16,7 @@ let str = `정용진 신세계그룹 부회장이 온라인상에서 공유되�
 // 키워드 배열로 가능
 let key = ["멸공", "논란"];
 
-// let key 배열에 사용자가 찾으려는 키워드를 넣으면 된다.
+// let key 배열에 사용자가 찾으려는 키워드를 넣으면 된다. 키워드가 1개가 아니라 여러개여도 대응이 가능
 let NumOfKey = key.length;
 
 let ResultSubStr = [];
