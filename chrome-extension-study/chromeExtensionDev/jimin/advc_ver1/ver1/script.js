@@ -1,5 +1,5 @@
 // 기본값
-let KEYWORDS = '치킨';
+let KEYWORDS = ['협찬', '내돈내산', '제공'];
 let HIGHLIGHT_COLOR = 'yellow';
 
 // 검색 결과 요소(선택자)
@@ -105,9 +105,11 @@ let getHtml = async (url) => {
       });
 
     for (let p in contents) {
-      if (contents[p].includes(KEYWORDS)) {
-        keyExist = true;
-        keySentences.push(contents[p]);
+      for (var i = 0; i < KEYWORDS.length; i++) {
+        if (contents[p].includes(KEYWORDS[i])) {
+          keyExist = true;
+          keySentences.push(contents[p]);
+        }
       }
     }
 

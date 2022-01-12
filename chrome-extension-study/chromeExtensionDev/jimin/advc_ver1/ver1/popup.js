@@ -1,4 +1,4 @@
-$button = document.getElementById('highlight');
+const $button = document.getElementById('highlight');
 
 $button.addEventListener('click', async () => {
   let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
