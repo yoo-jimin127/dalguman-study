@@ -64,10 +64,10 @@ export default function (url, keywords) {
 
   ////////////////////////
   //본문에서 키워드 찾고 키워드 문장 불러오기
-  const getSubString = (contents) =>{
+  const getSubString = (contents) => {
     const ResultSubStr = [];
     let ResultKeyCount = 0;
-  
+
     for (let key of keywords) {
       let index = 0;
       const Sub_str = []; // 키워드 포함 하위 문장이 들어가는 배열
@@ -76,7 +76,7 @@ export default function (url, keywords) {
       let FixIndex = 0; // 최종길이.
       let KeyWordCount = 0;
       let flag = false;
-  
+
       while (index !== -1) {
         flag = true;
         index = contents.indexOf(key, index + 1);
@@ -95,24 +95,25 @@ export default function (url, keywords) {
         ResultSubStr.push(Sub_str);
       }
     }
-    return { ResultKeyCount , ResultSubStr}
-  }
+    return { ResultKeyCount, ResultSubStr };
+  };
 
   // url에 들어가 키워드 포함 여부 및 배열 반환 함수
   const getHtml = async (url) => {
     try {
-      // 개인 배포한 프록시 서버 (주의 요함)
+      // 개인 배포한 프록시 서버 (***주의 요함***)
       const proxy = 'https://kh-proxy.herokuapp.com/';
       const proxyUrl = proxy + url;
 
       const response = await fetch(proxyUrl, {
-        method: 'GET',
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
-          'User-Agent':
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36',
         },
       });
+
+      if (!response.ok) {
+        throw new Error('error!');
+      }
 
       const text = await response.text();
       const parser = new DOMParser();
@@ -130,22 +131,28 @@ export default function (url, keywords) {
         nodeList = doc.querySelectorAll(innerSelector.etc);
       }
 
-    //게시물 본문 글 불러오기 
-    const contents = [...nodeList]
-    .map(node => node.innerText)
-    .map(text=>text.trim())
-    .filter(function (text) {
-      if((text !== '' && text !== ' ' && text !== '   ' && text !== '\n\n' && text !== '\n')) return true;
-      return false;
-    })
-    .join('');
-    
-    //본문에 키워드 있는지 확인 후 키워드 문장 가져오기
-    const subStrObj = getSubString(contents);
-    return subStrObj;
-      
+      //게시물 본문 글 불러오기
+      const contents = [...nodeList]
+        .map((node) => node.innerText)
+        .map((text) => text.trim())
+        .filter(function (text) {
+          if (
+            text !== '' &&
+            text !== ' ' &&
+            text !== '   ' &&
+            text !== '\n\n' &&
+            text !== '\n'
+          )
+            return true;
+          return false;
+        })
+        .join('');
+
+      //본문에 키워드 있는지 확인 후 키워드 문장 가져오기
+      const subStrObj = getSubString(contents);
+      return subStrObj;
     } catch (error) {
-      console.log(error);
+      console.log(`집계가 불가능한 웹사이트 링크입니다.\n${url}`);
     }
   };
 
@@ -154,20 +161,22 @@ export default function (url, keywords) {
     $target.style.backgroundColor = color;
   };
 
+  // hover 시 띄워주는 함수
+  const showDetails = () => {};
+
   // 최종
   const makeResult = async (url) => {
     const searchList = makeSearchList(url);
 
     searchList.forEach(async (obj) => {
       const result = await getHtml(obj.link);
-      
-      if (result.ResultKeyCount !== 0) {
+
+      if (result?.ResultKeyCount !== 0) {
         addHighlight(obj.target);
-        console.log(result.ResultSubStr);
-      } else{
+        console.log(result?.ResultSubStr);
+      } else {
         console.log('keyword 없음');
       }
-      
     });
   };
 
