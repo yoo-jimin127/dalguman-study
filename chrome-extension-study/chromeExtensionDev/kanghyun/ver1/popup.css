@@ -1,0 +1,34 @@
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 10px;
+  position: relative;
+}
+
+.add-form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+button {
+  height: 30px;
+  width: 30px;
+  outline: none;
+  margin: 10px;
+  border: none;
+  border-radius: 2px;
+}
