@@ -32,7 +32,6 @@ let str_arr = [
 let key_arr = ["멸공", "논란", "후보"];
 
 // let key 배열에 사용자가 찾으려는 키워드를 넣으면 된다. 키워드가 1개가 아니라 여러개여도 대응이 가능
-let NumOfKey = key_arr.length;
 
 let ResultSubStr = [];
 let ResultKeyPoint = [];
@@ -72,6 +71,10 @@ for (let str of str_arr) {
   }
 }
 
+console.log(ResultKeyCount);
+console.log(ResultKeyPoint);
+console.log(ResultSubStr);
+
 /*
 
 ResultKeyCount에는 key_arr와 str_arr에 대응합니다.
@@ -92,19 +95,40 @@ ResultKeyPoint의 0번째에 0번째 단어의 0번째 문단에서의 위치들
 
 */
 
-for (let a of ResultKeyCount) {
-  console.log(a);
-}
-for (let b in ResultSubStr) {
-  console.log(b);
-}
-for (let c of ResultKeyPoint) {
-  console.log(c);
-}
-// console.log("key값" + ResultKeyCount);
-// console.log("하위문장" + ResultSubStr);
-// console.log("key포인트" + ResultKeyPoint);
-
 // 유저가 입력한 키워드가 등장하는 위치가 담긴 배열
 // 등장 횟수
 // 키워드가 들어간 하위문장 앞뒤로 설정한 범위만큼
+// let ParaNum = str_arr.length;
+// let KeyNum = key_arr.length;
+
+/*
+ResultKeyCount배열을 순회하면서 keyNum갯수만큼 체크를한다.
+*/
+
+//
+let NumOfKey = key_arr.length;
+// 3개
+let FixOp = [];
+let count = 0;
+
+for (let j = 0; j < str_arr.length; j++) {
+  // 몇번째 사이트를 볼건지.
+  let op_cnt = 0;
+  while (count <= ResultKeyCount.length) {
+    // 해당 사이트에 단어가 등장한 유무를 검사
+    if (ResultKeyCount[count] > 0) {
+      op_cnt += 1;
+    }
+    if ((count + 1) % NumOfKey === 0) {
+      let temp = (1 - op_cnt / NumOfKey) * 100;
+      FixOp.push(Math.round(temp).toString(16));
+      break;
+    }
+    count++;
+  }
+}
+
+console.log("\n");
+console.log("\n");
+console.log("\n");
+console.log(FixOp);

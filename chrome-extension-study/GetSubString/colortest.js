@@ -15,6 +15,21 @@ function hexToRgb(hex) {
     : null;
 }
 
+var a = document.getElementsByTagName("h3");
+
+for (let i = 0; i < a.length; i++) {
+  a[i].style.backgroundColor = "#fe2000";
+}
+
+//0.25 = hex + "d9"
+//0.5
+//0.75
+//1
+
+//#0033ff + d9
+
+// #0033ffd9
+
 console.log(hexToRgb("#0033ff").r); // "51";
 console.log(hexToRgb("#0033ff").g); // "51";
 console.log(hexToRgb("#0033ff").b);
