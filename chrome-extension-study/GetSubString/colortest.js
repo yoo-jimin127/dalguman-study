@@ -18,3 +18,5 @@ function hexToRgb(hex) {
 console.log(hexToRgb("#0033ff").r); // "51";
 console.log(hexToRgb("#0033ff").g); // "51";
 console.log(hexToRgb("#0033ff").b);
+
+function fixop(/*parameter wordCount*/) {}
