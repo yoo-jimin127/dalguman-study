@@ -85,3 +85,44 @@ const delKeyword = (e) => {
     chrome.storage.sync.set({ keywords: filteredVals });
   });
 };
+
+const myBestColor = document.getElementById('myBestColor');
+const saveBtn = document.getElementById('jsSave');
+
+
+//색상을 선택하고 save버튼을 누르면 hex값 저장
+function handleSavingClick(event){
+    const saveColor = myBestColor;
+    console.log(saveColor.value);
+
+    // console.log(FixOp[0]);
+    // 테스트용 코드
+    // FixOp 리스트에 각각 hex투명도 값이 들어가 있는데 이거 색깔 뒤에다가 붙이면댐
+
+    // 투명도 결정 코드
+    // hex코드 뒤에다가 붙이면 된다.
+    let NumOfKey = key_arr.length;
+    // 3개
+    let FixOp = [];
+    let count = 0;
+
+    for (let j = 0; j < str_arr.length; j++) {
+        // 몇번째 사이트를 볼건지.
+    let op_cnt = 0;
+    while (count <= ResultKeyCount.length) {
+        // 해당 사이트에 단어가 등장한 유무를 검사
+        if (ResultKeyCount[count] > 0) {
+        op_cnt += 1;
+        }
+        if ((count + 1) % NumOfKey === 0) {
+        let temp = (1 - op_cnt / NumOfKey) * 100;
+        FixOp.push(Math.round(temp).toString(16));
+        break;
+        }
+        count++;
+        }
+    console.log(saveColor+FixOp[j])
+    }
+}
+
+saveBtn.addEventListener("click",handleSavingClick);
