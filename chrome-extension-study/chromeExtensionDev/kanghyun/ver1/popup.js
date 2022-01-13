@@ -17,9 +17,11 @@ $addForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
   chrome.storage.sync.get('keywords', ({ keywords }) => {
-    const values = $addFormInput.value.trim().split(',');
+    const values = $addFormInput.value.trim().split(',').map((keyword) => keyword.toLowerCase().trim());
 
-    const addedArr = keywords ? [...keywords, ...values] : values;
+    const filteredVals = values.filter((val) => !keywords?.includes(val))
+    
+    const addedArr = keywords && filteredVals.length !== 0 ? [...keywords, ...filteredVals] : values;
 
     showKeywordList(addedArr);
 
@@ -52,8 +54,17 @@ const showKeywordList = (arr) => {
     arr.forEach((keyword) => {
       const $keywordItem = document.createElement('li');
       $keywordItem.className = 'keyword-list__item';
-      $keywordItem.textContent = keyword;
 
+      const $keywordContent = document.createElement('span');
+      $keywordContent.className = 'keyword-list__content';
+      $keywordContent.textContent = keyword;
+
+      const $keywordDel = document.createElement('button');
+      $keywordDel.className = 'keyword-list__del';
+      $keywordDel.textContent = 'X';
+      $keywordDel.addEventListener('click', delKeyword);
+
+      $keywordItem.append($keywordContent, $keywordDel); //
       $keywordList.appendChild($keywordItem);
     });
   }
@@ -63,3 +74,14 @@ const showKeywordList = (arr) => {
 };
 
 // 삭제 버튼
+const delKeyword = (e) => {
+  const targetKeyword = e.currentTarget.previousElementSibling.textContent;
+  chrome.storage.sync.get('keywords', ({ keywords }) => {
+    const filteredVals = keywords.filter(
+      (keyword) => keyword !== targetKeyword
+    );
+
+    showKeywordList(filteredVals)
+    chrome.storage.sync.set({ keywords: filteredVals });
+  });
+};
