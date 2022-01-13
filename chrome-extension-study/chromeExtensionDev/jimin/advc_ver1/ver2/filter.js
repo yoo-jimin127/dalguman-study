@@ -112,8 +112,8 @@ export default function (url, keywords) {
         for (let i = 0; i < keywords.length; i++) {
           if (contents[p].includes(keywords[i])) {
             keyCount++;
-            console.log(keyCount);
             keyExist = true;
+
             keySentences.push(contents[p]);
           }
         }
