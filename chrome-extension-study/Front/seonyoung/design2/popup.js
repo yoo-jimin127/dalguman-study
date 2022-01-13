@@ -1,15 +1,16 @@
-$button = document.getElementById('tooltips');
+import filter from './tooltip.js';
 
-function handleMouseClick(){
-  chrome.scripting.executeScript({
-    target:{ tabId: tab.id },
-    files: ['script.js']
-  });
-}
+const $tooltip = document.getElementById('tooltip');
 
-$button.addEventListener('click', async()=>{
-  let [tab] = await chrome.tabs.query({
-    active: true, currentWindow: true
+
+$tooltip.addEventListener('click', async () => {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+  chrome.storage.sync.get('keywords', ({ keywords }) => {
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      function: filter,
+      args: [tab.url, keywords],
+    });
   });
-  handleMouseClick;
 });
