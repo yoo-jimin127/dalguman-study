@@ -63,6 +63,40 @@ export default function (url, keywords) {
   };
 
   ////////////////////////
+  //본문에서 키워드 찾고 키워드 문장 불러오기
+  const getSubString = (contents) =>{
+    const ResultSubStr = [];
+    let ResultKeyCount = 0;
+  
+    for (let key of keywords) {
+      let index = 0;
+      const Sub_str = []; // 키워드 포함 하위 문장이 들어가는 배열
+      let SubStrSize = 30; // 전체 사이즈
+      let FrontSubStrLen = 20; // 앞쪽 사이즈
+      let FixIndex = 0; // 최종길이.
+      let KeyWordCount = 0;
+      let flag = false;
+  
+      while (index !== -1) {
+        flag = true;
+        index = contents.indexOf(key, index + 1);
+        if (index !== -1) {
+          FixIndex = index - FrontSubStrLen;
+          // 키워드 위치 고정을 위한 수식. 음수일 경우 그대로이기 때문에 넣은 코드
+          if (FixIndex < 0) {
+            FixIndex = 0;
+          }
+          KeyWordCount += 1;
+          Sub_str.push(contents.substr(FixIndex, SubStrSize));
+        }
+      }
+      if (flag) {
+        ResultKeyCount = KeyWordCount;
+        ResultSubStr.push(Sub_str);
+      }
+    }
+    return { ResultKeyCount , ResultSubStr}
+  }
 
   // url에 들어가 키워드 포함 여부 및 배열 반환 함수
   const getHtml = async (url) => {
@@ -96,30 +130,20 @@ export default function (url, keywords) {
         nodeList = doc.querySelectorAll(innerSelector.etc);
       }
 
-      // 본문 글 불러오기.
-      // 공백 제거 방법 논의해야함.
-      let keyExist = false;
-      let keyCount = 0; //keywords 배열 내부 키워드 개수 카운트
-      const keySentences = [];
-
-      const contents = [...nodeList]
-        .map((node) => node.textContent)
-        .filter(function (text) {
-          return text !== '';
-        });
-
-      for (let p in contents) {
-        for (let i = 0; i < keywords.length; i++) {
-          if (contents[p].includes(keywords[i])) {
-            keyCount++;
-            keyExist = true;
-
-            keySentences.push(contents[p]);
-          }
-        }
-      }
-
-      return { keyExist, keySentences };
+    //게시물 본문 글 불러오기 
+    const contents = [...nodeList]
+    .map(node => node.innerText)
+    .map(text=>text.trim())
+    .filter(function (text) {
+      if((text !== '' && text !== ' ' && text !== '   ' && text !== '\n\n' && text !== '\n')) return true;
+      return false;
+    })
+    .join('');
+    
+    //본문에 키워드 있는지 확인 후 키워드 문장 가져오기
+    const subStrObj = getSubString(contents);
+    return subStrObj;
+      
     } catch (error) {
       console.log(error);
     }
@@ -136,10 +160,14 @@ export default function (url, keywords) {
 
     searchList.forEach(async (obj) => {
       const result = await getHtml(obj.link);
-
-      if (result.keyExist) {
+      
+      if (result.ResultKeyCount !== 0) {
         addHighlight(obj.target);
+        console.log(result.ResultSubStr);
+      } else{
+        console.log('keyword 없음');
       }
+      
     });
   };
 
