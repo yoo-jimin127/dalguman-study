@@ -105,7 +105,8 @@ ResultKeyPoint의 0번째에 0번째 단어의 0번째 문단에서의 위치들
 ResultKeyCount배열을 순회하면서 keyNum갯수만큼 체크를한다.
 */
 
-//
+// 투명도 결정 코드
+// hex코드 뒤에다가 붙이면 된다.
 let NumOfKey = key_arr.length;
 // 3개
 let FixOp = [];
@@ -128,7 +129,9 @@ for (let j = 0; j < str_arr.length; j++) {
   }
 }
 
-console.log("\n");
-console.log("\n");
-console.log("\n");
-console.log(FixOp);
+// console.log("\n");
+// console.log("\n");
+// console.log("\n");
+// console.log(FixOp);
+// 테스트용 코드
+// FixOp 리스트에 각각 hex투명도 값이 들어가 있는데 이거 색깔 뒤에다가 붙이면댐
