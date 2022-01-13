@@ -95,7 +95,7 @@ ResultKeyPoint의 0번째에 0번째 단어의 0번째 문단에서의 위치들
 for (let a of ResultKeyCount) {
   console.log(a);
 }
-for (let b of ResultSubStr) {
+for (let b in ResultSubStr) {
   console.log(b);
 }
 for (let c of ResultKeyPoint) {
