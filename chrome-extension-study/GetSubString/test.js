@@ -14,7 +14,6 @@ let str_arr = [
 정 부회장은 이처럼 논란이 지속되자 전날 오후 늦게 주변에 "더 이상 '멸공' 관련 발언은 하지 않을 것"이라고 말한 것으로 알려졌다.`,
   `지지율 정체로 고민하던 심상정 정의당 대선 후보가 일정 중단을 발표한 뒤, 정의당은 13일 선거대책위원장을 비롯한 선대위원 일괄 사퇴를 선언하는 등 혼란스러운 형국이다. 칩거 중인 심 후보가 언제, 어떤 입장을 표명할지 관심이 쏠리고 있다.
 이동영 정의당 수석대변인은 이날 기자단에 공지를 보내 "당 선대위는 현재 선거 상황의 심각성을 인식하고 선대위원장을 비롯한 선대위원이 일괄 사퇴하기로 뜻을 모았다"고 밝혔다.
-
 앞서 심 후보는 전날(12일) 선대위를 통해 "현 선거 상황을 심각하게 받아들이고, 이 시간 이후 모든 일정을 중단하고 숙고에 들어가겠다"고 밝힌 바 있다.
 
 한길리서치가 쿠키뉴스 의뢰로 지난 8~10일 전국 18세 이상 남녀 1014명을 대상으로 한 여론조사에서 심 후보는 2.2%를 기록해 허경영 국가혁명당 후보(3.2%)보다 낮은 지지율을 기록했다. 19대 대선에서 6.17%를 득표한 심 후보로서는 충격적인 결과다.
@@ -30,54 +29,81 @@ let str_arr = [
 
 //찾으려는 키(키워드)
 // 키워드 배열로 가능
-let key = ["멸공", "논란", "후보"];
+let key_arr = ["멸공", "논란", "후보"];
 
 // let key 배열에 사용자가 찾으려는 키워드를 넣으면 된다. 키워드가 1개가 아니라 여러개여도 대응이 가능
-let NumOfKey = key.length;
+let NumOfKey = key_arr.length;
 
 let ResultSubStr = [];
 let ResultKeyPoint = [];
 let ResultKeyCount = [];
 
 for (let str of str_arr) {
-  for (let start = 0; start < NumOfKey; start++) {
-    let i = 0;
+  for (let key of key_arr) {
+    let index = 0;
 
-    let key_point = [];
-    let Sub_str = [];
-    let SubStrSize = 30;
-    let FrontSubStrLen = 20;
-    let FixIndex = 0;
+    let key_point = []; // 본문에서 key의 위치를 받아두는 배열
+    let Sub_str = []; // 키워드 포함 하위 문장이 들어가는 배열
+    let SubStrSize = 30; // 전체 사이즈
+    let FrontSubStrLen = 20; // 앞쪽 사이즈
+    let FixIndex = 0; // 최종길이.
     let KeyWordCount = 0;
+    let flag = false;
 
-    if (i == -1) {
-      KeyWordCount = 0;
-      //검색결과가 없는경우. key가 본문에 아예 등장하지 않는 경우.
-      continue;
-    } else {
-      key_point.unshift(i);
-      while (i != -1) {
-        i = str.indexOf(key[start], i + 1);
-        if (i != -1) {
-          key_point.unshift(i); // 필요할수도 있으니까,,
-          FixIndex = i - FrontSubStrLen;
-          if (FixIndex < 0) {
-            FixIndex = 0;
-          }
-          KeyWordCount += 1;
-          Sub_str.unshift(str.substr(FixIndex, SubStrSize));
+    while (index != -1) {
+      flag = true;
+      index = str.indexOf(key, index + 1);
+      if (index != -1) {
+        key_point.push(index); // 필요할수도 있으니까,,
+        FixIndex = index - FrontSubStrLen;
+        // 키워드 위치 고정을 위한 수식. 음수일 경우 그대로이기 때문에 넣은 코드
+        if (FixIndex < 0) {
+          FixIndex = 0;
         }
+        KeyWordCount += 1;
+        Sub_str.push(str.substr(FixIndex, SubStrSize));
       }
     }
-    ResultKeyCount.unshift(KeyWordCount);
-    ResultSubStr.unshift(Sub_str);
-    ResultKeyPoint.unshift(key_point);
+    if (flag) {
+      ResultKeyCount.push(KeyWordCount);
+      ResultSubStr.push(Sub_str);
+      ResultKeyPoint.push(key_point);
+    }
   }
 }
 
-console.log("key값" + ResultKeyCount);
-console.log("하위문장" + ResultSubStr);
-console.log("key포인트" + ResultKeyPoint);
+/*
+
+ResultKeyCount에는 key_arr와 str_arr에 대응합니다.
+몇번째 문단에서 찾으려는 단어가 몇번 등장하는지 횟수를 기록한 배열입니다.
+ex) key_arr 0 번째에 "협찬"이라는 단어가 들어 있다면, str_arr 0번째 글에 "협찬"이 몇번 등장하는지 횟수를
+ResultKeyCount의 0번째에 담아놓았습니다.
+
+ResultSubStr에는 key_arr와 str_arr에 대응합니다.
+몇번째 문단에서 찾으려는 단어가 포함된 문장을 담은 배열입니다.
+ex) key_arr 0 번째에 "협찬"이라는 단어가 들어 있다면, str_arr 0번째에 해당 단어가 등장하는 하위문장들을
+담아둔 배열입니다. ResultSubStr의 0번째 단어가 0번째 문단에 등장한 하위문장들을 0번째에 담아놓았습니다.
+
+ResultKeyPoint에는 key_arr와 str_arr에 대응합니다.
+몇번째 문단에서 찾으려는 단어가 등장하는지 위치들을 기록해둔 배열입니다.
+ex) key_arr 0 번째에 "협찬"이라는 단어가 들어 있다면, str_arr 0번째의 해당 단어 위치들을 담아둔 배열입니다.
+ResultKeyPoint의 0번째에 0번째 단어의 0번째 문단에서의 위치들을 담아놓았습니다.
+
+
+*/
+
+for (let a of ResultKeyCount) {
+  console.log(a);
+}
+for (let b of ResultSubStr) {
+  console.log(b);
+}
+for (let c of ResultKeyPoint) {
+  console.log(c);
+}
+// console.log("key값" + ResultKeyCount);
+// console.log("하위문장" + ResultSubStr);
+// console.log("key포인트" + ResultKeyPoint);
 
 // 유저가 입력한 키워드가 등장하는 위치가 담긴 배열
 // 등장 횟수
