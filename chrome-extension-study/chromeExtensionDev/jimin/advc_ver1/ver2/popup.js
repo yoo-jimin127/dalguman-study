@@ -64,7 +64,7 @@ const showKeywordList = (arr) => {
       $keywordDel.textContent = 'X';
       $keywordDel.addEventListener('click', delKeyword);
 
-      $keywordItem.append($keywordContent, $keywordDel); //
+      $keywordItem.append($keywordContent, $keywordDel);
       $keywordList.appendChild($keywordItem);
     });
   }
