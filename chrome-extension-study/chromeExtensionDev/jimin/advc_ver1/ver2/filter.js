@@ -99,6 +99,7 @@ export default function (url, keywords) {
       // 본문 글 불러오기.
       // 공백 제거 방법 논의해야함.
       let keyExist = false;
+      let keyCount = 0; //keywords 배열 내부 키워드 개수 카운트
       const keySentences = [];
 
       const contents = [...nodeList]
@@ -108,9 +109,13 @@ export default function (url, keywords) {
         });
 
       for (let p in contents) {
-        if (contents[p].includes(keywords)) {
-          keyExist = true;
-          keySentences.push(contents[p]);
+        for (let i = 0; i < keywords.length; i++) {
+          if (contents[p].includes(keywords[i])) {
+            keyCount++;
+            console.log(keyCount);
+            keyExist = true;
+            keySentences.push(contents[p]);
+          }
         }
       }
 

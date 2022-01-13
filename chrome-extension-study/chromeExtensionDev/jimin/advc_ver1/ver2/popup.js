@@ -9,25 +9,26 @@ const $container = document.querySelector('.container');
 
 // 초기 & 업데이트 화면
 chrome.storage.sync.get('keywords', ({ keywords }) => {
-  showKeywordList(keywords);
+  showKeywordList(keywords || []);
 });
 
-// 추가 시 목록에 표시 (add 버튼)
-$addForm.addEventListener('submit', () => {
+// 추가 시 목록에 표시 (form 자동 업데이트되게 해놨는데, 수정 필요한가?)
+$addForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+
   chrome.storage.sync.get('keywords', ({ keywords }) => {
     const values = $addFormInput.value.trim().split(',');
-    const newValues = values.map((val) => val.trim());
-    const addedArr = [...keywords, ...newValues];
+
+    const addedArr = keywords ? [...keywords, ...values] : values;
 
     showKeywordList(addedArr);
 
-    $container.textContent = addedArr || 'nothing';
     chrome.storage.sync.set({ keywords: addedArr });
-    console.log(addedArr);
+
+    $addFormInput.value = '';
   });
 });
 
-// find 버튼 클릭 시 이벤트 처리
 $highlightBtn.addEventListener('click', async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
@@ -44,12 +45,21 @@ $highlightBtn.addEventListener('click', async () => {
 const showKeywordList = (arr) => {
   const $keywordList = document.createElement('ul');
   $keywordList.className = 'keyword-list';
-  arr.forEach((keyword) => {
-    const $keywordItem = document.createElement('li');
-    $keywordItem.className = 'keyword-list__item';
-    $keywordItem.textContent = keyword;
-    $keywordList.appendChild($keywordItem);
-  });
+
+  if (arr.length === 0) {
+    $keywordList.textContent = 'nothing';
+  } else {
+    arr.forEach((keyword) => {
+      const $keywordItem = document.createElement('li');
+      $keywordItem.className = 'keyword-list__item';
+      $keywordItem.textContent = keyword;
+
+      $keywordList.appendChild($keywordItem);
+    });
+  }
+
   $container.innerHTML = '';
   $container.appendChild($keywordList);
 };
+
+// 삭제 버튼
