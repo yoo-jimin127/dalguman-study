@@ -18,6 +18,11 @@ body {
   position: relative;
 }
 
+.logo-img {
+  width: 150px;
+  margin: 0 auto;
+}
+
 .add-form {
   display: flex;
   align-items: center;
@@ -36,8 +41,7 @@ body {
   height: 30px;
   width: 150px;
   outline: none;
-  margin-left: 35%;
-  margin-right: 50%;
+  margin: 0 auto;
   border: none;
   border-radius: 10px;
   color: white;
@@ -79,4 +83,8 @@ body {
 .keyword-list__item {
   margin-top: 5px;
   font-weight: 600;
+}
+
+.keyword-container {
+  margin: 20px auto;
 }
