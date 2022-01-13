@@ -8,3 +8,8 @@ $button.addEventListener('click', async () => {
     files: ['script.js'],
   });
 });
+
+function btnclick() {
+  var value = $('#inputval').val();
+  console.log(value);
+}

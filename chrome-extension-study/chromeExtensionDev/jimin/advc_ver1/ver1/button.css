@@ -1,4 +1,18 @@
-button {
+.inputform {
+  width: 100px;
+} 
+
+.inputval {
+  float: left;
+  width: 70px;
+}
+
+.savebtn {
+  float: right;
+  width: 20px;
+}
+
+#highlight {
   height: 40px;
   width: 100px;
   outline: none;
@@ -12,7 +26,8 @@ button {
   text-shadow: 0px 0px 3px rgba(73, 57, 0, .8);
 }
 
-button.current {
+#highlight.current {
+  width: 500px;
   box-shadow: 0 0 0 2px white,
               0 0 0 4px black;
 }
