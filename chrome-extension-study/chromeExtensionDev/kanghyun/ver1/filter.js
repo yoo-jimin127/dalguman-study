@@ -178,6 +178,8 @@ export default async function (url, keywords) {
     const resultArr = [];
 
     searchList.forEach(async (obj) => {
+      obj.target.style.backgroundColor = 'initial';
+
       const result = await getHtml(obj.link);
 
       // keyCount 배열 중 하나라도 0이 아니면 (본문에 키워드가 하나라도 있을떄) true
