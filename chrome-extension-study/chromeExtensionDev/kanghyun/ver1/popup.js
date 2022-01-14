@@ -20,14 +20,27 @@ $addForm.addEventListener('submit', (e) => {
       .split(',')
       .map((keyword) => keyword.toLowerCase().trim());
 
-    const filteredVals = inputValues.filter(
-      (val) => !(keywords.includes(val) || val.length === 0)
-    );
+    const filteredVals = keywords
+      ? inputValues.filter(
+          (val) => !(keywords.includes(val) || val.length === 0)
+        )
+      : inputValues;
 
-    const addedArr =
-      keywords && filteredVals.length !== 0
-        ? [...keywords, ...filteredVals]
-        : keywords;
+    let addedArr;
+    if (keywords && filteredVals.length !== 0) {
+      addedArr = [...keywords, ...filteredVals];
+    } else {
+      if (!keywords) {
+        // 로컬 스토리지에만 없는 경우
+        addedArr = [...filteredVals];
+      } else if (filteredVals.length === 0) {
+        // 입력값만 없는 경우
+        addedArr = [...keywords];
+      } else {
+        // 로컬 스토리지와 입력값 둘다 없는 경우
+        addedArr = [];
+      }
+    }
 
     showKeywordList(addedArr);
 
