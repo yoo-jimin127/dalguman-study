@@ -167,13 +167,25 @@ export default async function (url, keywords, selectedColor) {
     $target.style.backgroundColor = color + opacity;
   };
 
+  //돔 추가 
+  const addResultPopup = ($target,result) =>{
+    console.log($target,result);
+    const sentences = `
+      ${result.keywords[0].keyword} 이 나온 횟수는 ${result.keywords[0].keyCount} 번입니다.
+      이 키워드를 가지고 있는 문장들은 ..
+      ${result.keywords[0].keySubstr[0]}, ${result.keywords[0].keySubstr[1]} 가 있습니다.
+    `
+    $target.addEventListener('mouseover',function(){
+      alert(sentences);
+    })
+  }
+
   // 최종
   const makeResult = async (url, keywords, selectedColor) => {
     const searchList = makeSearchList(url);
     const resultArr = [];
 
     const allKeywordNum = keywords.length;
-
     if (allKeywordNum > 0) {
       searchList.forEach(async (obj) => {
         obj.target.style.backgroundColor = 'initial';
@@ -199,6 +211,9 @@ export default async function (url, keywords, selectedColor) {
           // 반환할 결과
           result.title = obj.target.textContent;
           resultArr.push(result);
+
+          //클릭시 result 가진 돔 추가
+          addResultPopup(obj.target,result);
         }
       });
     } else {
