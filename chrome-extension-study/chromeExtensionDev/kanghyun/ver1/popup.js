@@ -15,17 +15,18 @@ $addForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
   chrome.storage.sync.get('keywords', ({ keywords }) => {
-    const values = $addFormInput.value
-      .trim()
+    const inputValues = $addFormInput.value
       .split(',')
       .map((keyword) => keyword.toLowerCase().trim());
 
-    const filteredVals = values.filter((val) => !keywords?.includes(val));
+    const filteredVals = inputValues.filter(
+      (val) => !(keywords.includes(val) || val.length === 0)
+    );
 
     const addedArr =
       keywords && filteredVals.length !== 0
         ? [...keywords, ...filteredVals]
-        : values;
+        : keywords;
 
     showKeywordList(addedArr);
 
