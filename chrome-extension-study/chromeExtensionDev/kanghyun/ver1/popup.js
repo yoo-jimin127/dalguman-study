@@ -5,8 +5,6 @@ const $addFormInput = document.querySelector('.add-form__input');
 const $highlightBtn = document.getElementById('highlight-btn');
 const $container = document.querySelector('.container');
 
-// 우선 keyword 하나 가지고 동작하는 로직
-
 // 초기 & 업데이트 화면
 chrome.storage.sync.get('keywords', ({ keywords }) => {
   showKeywordList(keywords || []);
@@ -17,11 +15,17 @@ $addForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
   chrome.storage.sync.get('keywords', ({ keywords }) => {
-    const values = $addFormInput.value.trim().split(',').map((keyword) => keyword.toLowerCase().trim());
+    const values = $addFormInput.value
+      .trim()
+      .split(',')
+      .map((keyword) => keyword.toLowerCase().trim());
 
-    const filteredVals = values.filter((val) => !keywords?.includes(val))
-    
-    const addedArr = keywords && filteredVals.length !== 0 ? [...keywords, ...filteredVals] : values;
+    const filteredVals = values.filter((val) => !keywords?.includes(val));
+
+    const addedArr =
+      keywords && filteredVals.length !== 0
+        ? [...keywords, ...filteredVals]
+        : values;
 
     showKeywordList(addedArr);
 
@@ -31,17 +35,32 @@ $addForm.addEventListener('submit', (e) => {
   });
 });
 
+// async function test(a, b) {
+//   const res = await Promise.resolve(100);
+//   return res;
+// }
+
 $highlightBtn.addEventListener('click', async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
-  chrome.storage.sync.get('keywords', ({ keywords }) => {
-    chrome.scripting.executeScript({
-      target: { tabId: tab.id },
+  const keywordsObj = await chrome.storage.sync.get('keywords');
+
+  chrome.scripting.executeScript(
+    {
+      target: { tabId: tab.id, allFrames: true },
       function: filter,
-      args: [tab.url, keywords],
-    });
-  });
+      args: [tab.url, keywordsObj.keywords],
+    },
+    (resultArr) => {
+      const res = resultArr[0];
+      console.log(res.result);
+      console.log(resultArr);
+    }
+  );
 });
+
+// hover 시 띄워주는 함수
+const showDetails = () => {};
 
 // 돔 요소 생성
 const showKeywordList = (arr) => {
@@ -64,7 +83,7 @@ const showKeywordList = (arr) => {
       $keywordDel.textContent = 'X';
       $keywordDel.addEventListener('click', delKeyword);
 
-      $keywordItem.append($keywordContent, $keywordDel); //
+      $keywordItem.append($keywordContent, $keywordDel);
       $keywordList.appendChild($keywordItem);
     });
   }
@@ -81,7 +100,7 @@ const delKeyword = (e) => {
       (keyword) => keyword !== targetKeyword
     );
 
-    showKeywordList(filteredVals)
+    showKeywordList(filteredVals);
     chrome.storage.sync.set({ keywords: filteredVals });
   });
 };

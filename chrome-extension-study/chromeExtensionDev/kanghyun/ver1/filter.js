@@ -1,4 +1,6 @@
-export default function (url, keywords) {
+export default async function (url, keywords) {
+  console.log(url, keywords);
+
   // 기본값
   const HIGHLIGHT_COLOR = 'yellow';
 
@@ -65,8 +67,7 @@ export default function (url, keywords) {
   ////////////////////////
   //본문에서 키워드 찾고 키워드 문장 불러오기
   const getSubString = (contents) => {
-    const ResultSubStr = [];
-    let ResultKeyCount = 0;
+    const ResultArr = [];
 
     for (let key of keywords) {
       let index = 0;
@@ -91,11 +92,15 @@ export default function (url, keywords) {
         }
       }
       if (flag) {
-        ResultKeyCount = KeyWordCount;
-        ResultSubStr.push(Sub_str);
+        ResultArr.push({
+          keyword: key,
+          keyCount: KeyWordCount,
+          keySubstr: Sub_str,
+        });
       }
     }
-    return { ResultKeyCount, ResultSubStr };
+
+    return ResultArr;
   };
 
   // url에 들어가 키워드 포함 여부 및 배열 반환 함수
@@ -149,8 +154,14 @@ export default function (url, keywords) {
         .join('');
 
       //본문에 키워드 있는지 확인 후 키워드 문장 가져오기
-      const subStrObj = getSubString(contents);
-      return subStrObj;
+      const subStrArr = getSubString(contents);
+
+      const resultObj = {
+        keywords: subStrArr,
+        url,
+      };
+
+      return resultObj;
     } catch (error) {
       console.log(`집계가 불가능한 웹사이트 링크입니다.\n${url}`);
     }
@@ -161,24 +172,29 @@ export default function (url, keywords) {
     $target.style.backgroundColor = color;
   };
 
-  // hover 시 띄워주는 함수
-  const showDetails = () => {};
-
   // 최종
   const makeResult = async (url) => {
     const searchList = makeSearchList(url);
+    const resultArr = [];
 
     searchList.forEach(async (obj) => {
       const result = await getHtml(obj.link);
 
-      if (result?.ResultKeyCount !== 0) {
+      // keyCount 배열 중 하나라도 0이 아니면 (본문에 키워드가 하나라도 있을떄) true
+      const keyCountArr = result?.keywords.map((res) => res.keyCount);
+      if (keyCountArr && keyCountArr.some((count) => count !== 0)) {
         addHighlight(obj.target);
-        console.log(result?.ResultSubStr);
-      } else {
-        console.log('keyword 없음');
+
+        result.title = obj.target.textContent;
+        resultArr.push(result);
       }
     });
+
+    return resultArr;
   };
 
-  makeResult(url);
+  const dataArr = await makeResult(url);
+  console.log(dataArr);
+
+  return dataArr;
 }
