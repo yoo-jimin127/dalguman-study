@@ -4,8 +4,7 @@ const $addForm = document.querySelector('.add-form');
 const $addFormInput = document.querySelector('.add-form__input');
 const $highlightBtn = document.getElementById('highlight-btn');
 const $container = document.querySelector('.container');
-
-// 우선 keyword 하나 가지고 동작하는 로직
+const $colorBox = document.querySelector('.color-box');
 
 // 초기 & 업데이트 화면
 chrome.storage.sync.get('keywords', ({ keywords }) => {
@@ -17,11 +16,31 @@ $addForm.addEventListener('submit', (e) => {
   e.preventDefault();
 
   chrome.storage.sync.get('keywords', ({ keywords }) => {
-    const values = $addFormInput.value.trim().split(',').map((keyword) => keyword.toLowerCase().trim());
+    const inputValues = $addFormInput.value
+      .split(',')
+      .map((keyword) => keyword.toLowerCase().trim());
 
-    const filteredVals = values.filter((val) => !keywords?.includes(val))
-    
-    const addedArr = keywords && filteredVals.length !== 0 ? [...keywords, ...filteredVals] : values;
+    const filteredVals = keywords
+      ? inputValues.filter(
+          (val) => !(keywords.includes(val) || val.length === 0)
+        )
+      : inputValues;
+
+    let addedArr;
+    if (keywords && filteredVals.length !== 0) {
+      addedArr = [...keywords, ...filteredVals];
+    } else {
+      if (!keywords) {
+        // 로컬 스토리지에만 없는 경우
+        addedArr = [...filteredVals];
+      } else if (filteredVals.length === 0) {
+        // 입력값만 없는 경우
+        addedArr = [...keywords];
+      } else {
+        // 로컬 스토리지와 입력값 둘다 없는 경우
+        addedArr = [];
+      }
+    }
 
     showKeywordList(addedArr);
 
@@ -31,17 +50,34 @@ $addForm.addEventListener('submit', (e) => {
   });
 });
 
+// async function test(a, b) {
+//   const res = await Promise.resolve(100);
+//   return res;
+// }
+
 $highlightBtn.addEventListener('click', async () => {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
-  chrome.storage.sync.get('keywords', ({ keywords }) => {
-    chrome.scripting.executeScript({
-      target: { tabId: tab.id },
+  const keywordsObj = await chrome.storage.sync.get('keywords');
+
+  const selectedColor = $colorBox.value;
+
+  chrome.scripting.executeScript(
+    {
+      target: { tabId: tab.id, allFrames: true },
       function: filter,
-      args: [tab.url, keywords],
-    });
-  });
+      args: [tab.url, keywordsObj.keywords, selectedColor],
+    },
+    (resultArr) => {
+      const res = resultArr[0];
+      console.log(res.result);
+      console.log(resultArr);
+    }
+  );
 });
+
+// hover 시 띄워주는 함수
+const showDetails = () => {};
 
 // 돔 요소 생성
 const showKeywordList = (arr) => {
@@ -81,7 +117,7 @@ const delKeyword = (e) => {
       (keyword) => keyword !== targetKeyword
     );
 
-    showKeywordList(filteredVals)
+    showKeywordList(filteredVals);
     chrome.storage.sync.set({ keywords: filteredVals });
   });
 };

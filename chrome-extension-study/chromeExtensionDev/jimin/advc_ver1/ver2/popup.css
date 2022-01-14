@@ -30,7 +30,7 @@ body {
 }
 
 .add-form__input {
-  width: 375px;
+  width: 350px;
   height: 30px;
   border-radius: 10px;
   border: none;
@@ -56,8 +56,10 @@ body {
 }
 
 .add-form__btn {
+  position: absolute;
+  left: 365px;
   height: 30px;
-  width: 75px;
+  width: 50px;
   outline: none;
   margin: 10px;
   border: none;
@@ -67,6 +69,24 @@ body {
   background-color: steelblue;
   font-weight: 600;
   box-shadow: 0.5px 0.5px 0.5px 0.5px rgba(73, 57, 0, .5);
+  cursor: pointer;
+}
+
+.color-box {
+  position: absolute;
+  top: 47px;
+  left: 420px;
+  height: 40px;
+  width: 50px;
+  outline: none;
+  margin: 10px;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  text-shadow: 0px 0px 3px rgba(73, 57, 0, .8);
+  background-color: white;
+  /* background-color: steelblue;
+  box-shadow: 0.5px 0.5px 0.5px 0.5px rgba(73, 57, 0, .5); */
   cursor: pointer;
 }
 
@@ -125,7 +145,6 @@ body {
   margin-bottom: 20px;
   background-color: rgba(70, 130, 180, .3);
   border-radius: 10px;
-
 }
 
 .keyword-text{

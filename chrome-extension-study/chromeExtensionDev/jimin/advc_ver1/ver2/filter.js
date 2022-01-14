@@ -1,7 +1,4 @@
-export default function (url, keywords) {
-  // 기본값
-  const HIGHLIGHT_COLOR = 'yellow';
-
+export default async function (url, keywords, selectedColor) {
   // 검색 결과 요소(선택자)
   const outerSelectors = {
     google: {
@@ -64,8 +61,8 @@ export default function (url, keywords) {
 
   ////////////////////////
   //본문에서 키워드 찾고 키워드 문장 불러오기
-  const getSubString = (contents) => {
-    const ResultArr =[];
+  const getSubString = (contents, keywords) => {
+    const ResultArr = [];
 
     for (let key of keywords) {
       let index = 0;
@@ -93,16 +90,16 @@ export default function (url, keywords) {
         ResultArr.push({
           keyword: key,
           keyCount: KeyWordCount,
-          keySubstr: Sub_str
-        })
+          keySubstr: Sub_str,
+        });
       }
     }
-    console.log(ResultArr);
+
     return ResultArr;
   };
 
   // url에 들어가 키워드 포함 여부 및 배열 반환 함수
-  const getHtml = async (url) => {
+  const getHtml = async (url, keywords) => {
     try {
       // 개인 배포한 프록시 서버 (***주의 요함***)
       const proxy = 'https://kh-proxy.herokuapp.com/';
@@ -152,42 +149,68 @@ export default function (url, keywords) {
         .join('');
 
       //본문에 키워드 있는지 확인 후 키워드 문장 가져오기
-      const subStrObj = getSubString(contents);
-      return subStrObj;
+      const subStrArr = getSubString(contents, keywords);
 
+      const resultObj = {
+        keywords: subStrArr,
+        url,
+      };
+
+      return resultObj;
     } catch (error) {
       console.log(`집계가 불가능한 웹사이트 링크입니다.\n${url}`);
     }
   };
 
   // 하이라이트 해주는 함수
-  const addHighlight = ($target, color = 'yellow') => {
-    $target.style.backgroundColor = color;
+  const addHighlight = ($target, color = '#ffff00', opacity) => {
+    $target.style.backgroundColor = color + opacity;
   };
-
-  // hover 시 띄워주는 함수
-  const showDetails = () => {};
 
   // 최종
-  const makeResult = async (url) => {
+  const makeResult = async (url, keywords, selectedColor) => {
     const searchList = makeSearchList(url);
+    const resultArr = [];
 
-    searchList.forEach(async (obj) => {
-      const result = await getHtml(obj.link);
+    const allKeywordNum = keywords.length;
 
-      // keyCount 배열 중 하나라도 0이 아니면 (본문에 키워드가 하나라도 있을떄) true 
-      const keyCountArr = result.map(res=>res.keyCount);
-      if(keyCountArr.some(count => count !==0)) {
-        addHighlight(obj.target);
-        result.forEach(res=> {
-          console.log(`키워드 : ${res.keyword} / 나온 개수 : ${res.keyCount}`);
-          console.log(res.keySubstr);
-        })
-      } else {
-        console.log('keyword 없음');
-      }
-    });
+    if (allKeywordNum > 0) {
+      searchList.forEach(async (obj) => {
+        obj.target.style.backgroundColor = 'initial';
+
+        const result = await getHtml(obj.link, keywords);
+
+        // keyCount 배열 중 하나라도 0이 아니면 (본문에 키워드가 하나라도 있을떄) true
+        const keyCountArr = result?.keywords.map((res) => res.keyCount);
+
+        // 포함한 키워드 갯수
+        const includeKeywordsNum = keyCountArr
+          ? keyCountArr.filter((count) => count > 0).length
+          : 0;
+
+        if (includeKeywordsNum > 0) {
+          // 키워드 등장에 따른 투명도
+          const temp = (includeKeywordsNum / allKeywordNum) * 255;
+          const targetOp = Math.round(temp).toString(16);
+
+          // 하이라이트 추가
+          addHighlight(obj.target, selectedColor, targetOp);
+
+          // 반환할 결과
+          result.title = obj.target.textContent;
+          resultArr.push(result);
+        }
+      });
+    } else {
+      alert('키워드를 입력해주세요!');
+      // keyword가 없을 떄 로직 추가
+    }
+
+    return resultArr;
   };
 
-  makeResult(url);
+  const dataArr = await makeResult(url, keywords, selectedColor);
+  console.log(dataArr);
+
+  return dataArr;
 }
