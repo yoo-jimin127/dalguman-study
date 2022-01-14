@@ -1,9 +1,4 @@
-export default async function (url, keywords) {
-  console.log(url, keywords);
-
-  // 기본값
-  const HIGHLIGHT_COLOR = 'yellow';
-
+export default async function (url, keywords, selectedColor) {
   // 검색 결과 요소(선택자)
   const outerSelectors = {
     google: {
@@ -173,7 +168,7 @@ export default async function (url, keywords) {
   };
 
   // 최종
-  const makeResult = async (url, keywords) => {
+  const makeResult = async (url, keywords, selectedColor) => {
     const searchList = makeSearchList(url);
     const resultArr = [];
 
@@ -198,11 +193,8 @@ export default async function (url, keywords) {
           const temp = (includeKeywordsNum / allKeywordNum) * 255;
           const targetOp = Math.round(temp).toString(16);
 
-          // 지정 색상
-          const targetColor = '#ffff00'; // 수정 필요
-
           // 하이라이트 추가
-          addHighlight(obj.target, targetColor, targetOp);
+          addHighlight(obj.target, selectedColor, targetOp);
 
           // 반환할 결과
           result.title = obj.target.textContent;
@@ -217,7 +209,7 @@ export default async function (url, keywords) {
     return resultArr;
   };
 
-  const dataArr = await makeResult(url, keywords);
+  const dataArr = await makeResult(url, keywords, selectedColor);
   console.log(dataArr);
 
   return dataArr;

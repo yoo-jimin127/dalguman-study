@@ -4,6 +4,7 @@ const $addForm = document.querySelector('.add-form');
 const $addFormInput = document.querySelector('.add-form__input');
 const $highlightBtn = document.getElementById('highlight-btn');
 const $container = document.querySelector('.container');
+const $colorBox = document.querySelector('.color-box');
 
 // 초기 & 업데이트 화면
 chrome.storage.sync.get('keywords', ({ keywords }) => {
@@ -46,11 +47,13 @@ $highlightBtn.addEventListener('click', async () => {
 
   const keywordsObj = await chrome.storage.sync.get('keywords');
 
+  const selectedColor = $colorBox.value;
+
   chrome.scripting.executeScript(
     {
       target: { tabId: tab.id, allFrames: true },
       function: filter,
-      args: [tab.url, keywordsObj.keywords],
+      args: [tab.url, keywordsObj.keywords, selectedColor],
     },
     (resultArr) => {
       const res = resultArr[0];
