@@ -99,7 +99,7 @@ export default async function (url, keywords, selectedColor) {
   };
 
   // url에 들어가 키워드 포함 여부 및 배열 반환 함수
-  const getHtml = async (url, keywords) => {
+  const getData = async (url, keywords) => {
     try {
       // 개인 배포한 프록시 서버 (***주의 요함***)
       const proxy = 'https://kh-proxy.herokuapp.com/';
@@ -167,46 +167,67 @@ export default async function (url, keywords, selectedColor) {
     $target.style.backgroundColor = color + opacity;
   };
 
+  //돔 추가
+  const addResultPopup = ($target, result) => {
+    const sentences = `
+      ${result.keywords[0].keyword} 이 나온 횟수는 ${result.keywords[0].keyCount} 번입니다.
+      이 키워드를 가지고 있는 문장들은 ..
+      ${result.keywords[0].keySubstr[0]}, ${result.keywords[0].keySubstr[1]} 가 있습니다.
+    `;
+    $target.addEventListener('mouseover', function () {
+      alert(sentences);
+    });
+  };
+
+  // 분석
+  const getDataAndHighlight = async (obj, allKeywordNum, selectedColor) => {
+    obj.target.style.backgroundColor = 'initial';
+
+    const result = await getData(obj.link, keywords); // 비동기
+
+    // keyCount 배열 중 하나라도 0이 아니면 (본문에 키워드가 하나라도 있을떄) true
+    const keyCountArr = result?.keywords.map((res) => res.keyCount);
+
+    // 포함한 키워드 갯수
+    const includeKeywordsNum = keyCountArr
+      ? keyCountArr.filter((count) => count > 0).length
+      : 0;
+
+    if (includeKeywordsNum > 0) {
+      // 키워드 등장에 따른 투명도
+      const temp = (includeKeywordsNum / allKeywordNum) * 255;
+      const targetOp = Math.round(temp).toString(16);
+
+      // 하이라이트 추가
+      addHighlight(obj.target, selectedColor, targetOp);
+
+      // 반환할 결과
+      result.title = obj.target.textContent;
+
+      console.log('링크별 동작');
+      return result;
+    }
+  };
+
   // 최종
   const makeResult = async (url, keywords, selectedColor) => {
     const searchList = makeSearchList(url);
-    const resultArr = [];
 
     const allKeywordNum = keywords.length;
 
     if (allKeywordNum > 0) {
-      searchList.forEach(async (obj) => {
-        obj.target.style.backgroundColor = 'initial';
+      const resultArr = searchList.map((item) =>
+        getDataAndHighlight(item, allKeywordNum, selectedColor)
+      );
 
-        const result = await getHtml(obj.link, keywords);
-
-        // keyCount 배열 중 하나라도 0이 아니면 (본문에 키워드가 하나라도 있을떄) true
-        const keyCountArr = result?.keywords.map((res) => res.keyCount);
-
-        // 포함한 키워드 갯수
-        const includeKeywordsNum = keyCountArr
-          ? keyCountArr.filter((count) => count > 0).length
-          : 0;
-
-        if (includeKeywordsNum > 0) {
-          // 키워드 등장에 따른 투명도
-          const temp = (includeKeywordsNum / allKeywordNum) * 255;
-          const targetOp = Math.round(temp).toString(16);
-
-          // 하이라이트 추가
-          addHighlight(obj.target, selectedColor, targetOp);
-
-          // 반환할 결과
-          result.title = obj.target.textContent;
-          resultArr.push(result);
-        }
-      });
+      await Promise.allSettled(resultArr);
+      console.log('이게 마지막에 실행되어야 성공');
+      return resultArr;
     } else {
       alert('키워드를 입력해주세요!');
+      return;
       // keyword가 없을 떄 로직 추가
     }
-
-    return resultArr;
   };
 
   const dataArr = await makeResult(url, keywords, selectedColor);
