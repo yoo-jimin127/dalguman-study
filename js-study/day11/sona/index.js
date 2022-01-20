@@ -13,7 +13,9 @@ const skipBtns = document.querySelectorAll('.skip');
 function togglePlay(){
     video.paused ? video.play() : video.pause();
     //video[video.paused ? 'play' : 'pause']();
-    // 재생 여부에 따라  아이콘 바꾸기
+}
+
+function updateBtn(){
     const icon = video.paused ? '▶' : '❚❚';
     toggleBtn.innerText = icon;
 }
@@ -31,7 +33,8 @@ function handleRange(){
 }
 
 function updateProgress () {
-    progressBar.style.width = (video.currentTime / video.duration) *100 +"%";
+    // progressBar.style.width = (video.currentTime / video.duration) *100 +"%";
+    progressBar.style.flexBasis = `${(video.currentTime / video.duration) *100}%`;
 }
 
 function updateTimeline(e) {
@@ -42,7 +45,8 @@ function updateTimeline(e) {
 
 // Hook up the event listeners
 video.addEventListener('timeupdate',updateProgress);
-
+video.addEventListener('play',updateBtn);
+video.addEventListener('pause',updateBtn);
 toggleBtn.addEventListener('click',togglePlay);
 skipBtns.forEach(btn=>{
     btn.addEventListener('click',skipPlay);

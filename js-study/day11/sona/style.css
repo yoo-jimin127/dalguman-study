@@ -42,13 +42,14 @@ body{
     height:10px;
     border-radius: 3px;
     background-color: rgba(206, 206, 206,0.5);
-    position: relative;
+    display: flex;
 }
 
 .progress_bar{
-    position: absolute;
+    /* position: absolute;
     top:0;
-    left:0;
+    left:0; */
+    
     height:10px;
     border-radius: 3px;
     background-color: #e27878;
