@@ -3,6 +3,7 @@ const player = document.querySelector('.player');
 const video = document.querySelector('.video');
 
 const toggleBtn = document.querySelector('#togglePlay');
+const progress = document.querySelector('.progress_container');
 const progressBar = document.querySelector('.progress_bar');
 
 const ranges = document.querySelectorAll('.range');
@@ -13,6 +14,8 @@ function togglePlay(){
     video.paused ? video.play() : video.pause();
     //video[video.paused ? 'play' : 'pause']();
     // 재생 여부에 따라  아이콘 바꾸기
+    const icon = video.paused ? '▶' : '❚❚';
+    toggleBtn.innerText = icon;
 }
 
 function skipPlay () {
@@ -31,9 +34,14 @@ function updateProgress () {
     progressBar.style.width = (video.currentTime / video.duration) *100 +"%";
 }
 
+function updateTimeline(e) {
+    const scrubTime = (e.offsetX /progress.offsetWidth) * video.duration;
+    video.currentTime = scrubTime;
+}
+
 
 // Hook up the event listeners
-video.addEventListener('timeupdate',updateProgress)
+video.addEventListener('timeupdate',updateProgress);
 
 toggleBtn.addEventListener('click',togglePlay);
 skipBtns.forEach(btn=>{
@@ -44,3 +52,7 @@ ranges.forEach(range=>{
     range.addEventListener('mousemove',handleRange);
 })
 
+progress.addEventListener('click',updateTimeline);
+progress.addEventListener('mousedown',()=> mousedown=true);
+progress.addEventListener('mouseup',()=> mousedown=false);
+progress.addEventListener('mousemove',(e)=> mousedown && updateTimeline(e));
