@@ -1,20 +1,36 @@
-const navs = document.querySelectorAll('.cool > li');
+const menus = document.querySelectorAll('.cool > li');
+const nav = document.querySelector('.top');
 const dropdownBackground = document.querySelector('.dropdownBackground');
 
 function enterHandler(){
-    this.classList.add('nav-hover');
+    // Add classes
+    this.classList.add('hover');
     dropdownBackground.classList.add('open');
+    setTimeout(()=> this.classList.contains('hover') && this.classList.add('hover-active'),150);
 
+    // Get Coords
     const dropdown = this.querySelector('.dropdown');
     const dropdownCoords = dropdown.getBoundingClientRect();
-    dropdownBackground.style.setProperty('width',`${dropdownCoords.width}px`);
-    dropdownBackground.style.setProperty('height',`${dropdownCoords.height}px`);
-    dropdownBackground.style.setProperty('transform',`translate(${dropdownCoords.left}px,${dropdownCoords.top}px)`);
+    const navCoords = nav.getBoundingClientRect();
+    const coords = {
+        width: dropdownCoords.width,
+        height:dropdownCoords.height,
+        left: dropdownCoords.left-navCoords.left,
+        top:dropdownCoords.top-navCoords.top
+    }
+
+    // Set dropdown-background settings
+    dropdownBackground.style.setProperty('width',`${coords.width}px`);
+    dropdownBackground.style.setProperty('height',`${coords.height}px`);
+    dropdownBackground.style.setProperty('transform',`translate(${coords.left}px,${coords.top}px)`)
+
 }
 
 function leaveHandler(){
-    this.classList.remove('nav-hover');
+    // Remove classes
+    this.classList.remove('hover','hover-active');
+    dropdownBackground.classList.remove('open');
 }
 
-navs.forEach(nav=>nav.addEventListener('mouseenter',enterHandler));
-navs.forEach(nav=>nav.addEventListener('mouseleave',leaveHandler));
+menus.forEach(menu=>menu.addEventListener('mouseenter',enterHandler));
+menus.forEach(menu=>menu.addEventListener('mouseleave',leaveHandler));
